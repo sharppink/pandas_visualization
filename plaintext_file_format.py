@@ -1,0 +1,15 @@
+data_file = open('c:/Temp/PANDASPLOTLY_FUNCODING_FULLDATA_20240601/00_Material(Uploaded)/00_data/practice.txt', 'w', encoding = 'utf-8-sig')
+data_file.write('유치원A\n')
+data_file.write('초등학교B\n')
+data_file.write('중학교C\n')
+data_file.write('고등학교D')
+data_file.close()
+data_file.close()
+
+data_file = open('c:/Temp/PANDASPLOTLY_FUNCODING_FULLDATA_20240601/00_Material(Uploaded)/00_data/text_data.txt', 'a', encoding = 'utf-8-sig')
+data_file.write('\n대학교E')
+data_file.close()
+
+data_file = open('c:/Temp/PANDASPLOTLY_FUNCODING_FULLDATA_20240601/00_Material(Uploaded)/00_data/text_data.txt', 'r', encoding = 'utf-8-sig')
+print(data_file.read())
+data_file.close()
