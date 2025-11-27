@@ -1,11 +1,10 @@
 import sys
+from pykrx import stock
 
-value = sys.argv[1]  # 문자열 그대로 받음
 
-# 예시: 숫자로 처리
-try:
-    num = float(value)
-    result = num * 10
-    print(result)
-except:
-    print(f"입력받은 값: {value}")
+
+value = sys.argv[1]  
+
+df = stock.get_market_ohlcv_by_date(fromdate="20200101", todate="20241231", ticker="005930")
+print(df)
+
