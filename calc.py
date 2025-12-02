@@ -23,4 +23,5 @@ result = stock.get_market_ohlcv_by_date(fromdate="20200101", todate="20241231", 
 
 print(result.to_csv(index=True))
 
-def build_transformer
+def transfromer_decoder():
+    
