@@ -1,0 +1,61 @@
+# 출력을 원하실 경우 print() 함수 활용
+# 예시) print(df.head())
+
+# getcwd(), chdir() 등 작업 폴더 설정 불필요
+# 파일 경로 상 내부 드라이브 경로(C: 등) 접근 불가
+
+import pandas as pd
+
+train = pd.read_csv("data/customer_train.csv")
+test = pd.read_csv("data/customer_test.csv")
+
+# 사용자 코딩
+train['환불금액'] = train['환불금액'].fillna(0)
+test['환불금액'] = test['환불금액'].fillna(0)
+
+x_train = train.drop(['회원ID', '총구매액'], axis=1)
+y = train['총구매액']
+x_test = test.drop(['회원ID'], axis = 1)
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+num_col = x_train.select_dtypes(exclude = 'object').columns
+
+x_train[num_col] = scaler.fit_transform(x_train[num_col])
+x_test[num_col] = scaler.transform(x_test[num_col])
+
+#print(set(x_test['주구매상품']) - set(x_train['주구매상품']))
+#print(set(x_test['주구매지점']) - set(x_train['주구매지점']))
+
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+x_train['주구매상품'] = encoder.fit_transform(x_train['주구매상품'])
+x_test['주구매상품'] = encoder.transform(x_test['주구매상품'])
+x_train['주구매지점'] = encoder.fit_transform(x_train['주구매지점'])
+x_test['주구매지점'] = encoder.transform(x_test['주구매지점'])
+
+from sklearn.model_selection import train_test_split
+x_train, x_val, y_train, y_val = train_test_split(x_train, y, test_size= 0.2)
+
+from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor, BaggingRegressor, ExtraTreesRegressor
+random = RandomForestRegressor()
+ada =  AdaBoostRegressor()
+bag = BaggingRegressor()
+ext = ExtraTreesRegressor()
+
+random.fit(x_train, y_train)
+y_pred = random.predict(x_val)
+
+from sklearn.metrics import root_mean_squared_error, r2_score
+rmse = root_mean_squared_error(y_val, y_pred)
+r2 =  r2_score(y_val, y_pred)
+print(rmse, r2)
+
+y_pred = random.predict(x_test)
+result = pd.DataFrame(y_pred, columns=['pred'])
+result.to_csv('result.csv', index= False)
+
+print(pd.read_csv('result.csv'))
+# 답안 제출 참고
+# 아래 코드는 예시이며 변수명 등 개인별로 변경하여 활용
+# pd.DataFrame변수.to_csv("result.csv", index=False)
