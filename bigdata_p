@@ -1,0 +1,31 @@
+# 출력을 원하실 경우 print() 함수 활용
+# 예시) print(df.head())
+
+# getcwd(), chdir() 등 작업 폴더 설정 불필요
+# 파일 경로 상 내부 드라이브 경로(C: 등) 접근 불가
+
+import pandas as pd
+
+train = pd.read_csv("data/customer_train.csv")
+test = pd.read_csv("data/customer_test.csv")
+
+# 사용자 코딩
+#print(train.info())
+#print(test.info())
+
+x_train = train.drop(['회원ID', '총구매액'], axis=1)
+y = train['총구매액']
+x_test = test.drop(['회원ID'], axis=1)
+
+x_train['환불금액'] = x_train['환불금액'].fillna(0)
+x_test['환불금액'] = x_test['환불금액'].fillna(0)
+
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+num_cols = x_train.select_dtypes(exclude='object').columns
+#print(num_cols)
+x_train[num_cols] = scaler.fit_transform(x_train[num_cols])
+x_test[num_cols] = scaler.transform(x_test[num_cols])
+# 답안 제출 참고
+# 아래 코드는 예시이며 변수명 등 개인별로 변경하여 활용
+# pd.DataFrame변수.to_csv("result.csv", index=False)
